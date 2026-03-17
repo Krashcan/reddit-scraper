@@ -5,7 +5,7 @@ Fetches top posts and comments from Reddit subreddits and saves them as markdown
 ## Setup
 
 ```bash
-pip install -r requirements.txt
+uv sync
 cp .env.example .env
 ```
 
@@ -14,13 +14,13 @@ cp .env.example .env
 Basic usage with multiple subreddits:
 
 ```bash
-python fetch.py --subreddits indiehackers SideProject webdev --niche "marketing for engineers"
+uv run reddit-fetch --subreddits indiehackers SideProject webdev --niche "marketing for engineers"
 ```
 
 All CLI options:
 
 ```bash
-python fetch.py \
+uv run reddit-fetch \
   --subreddits SideProject webdev \
   --niche "marketing for engineers" \
   --time-filter month \
@@ -33,7 +33,7 @@ python fetch.py \
 Dry run (fetch posts only, skip comments, no file written):
 
 ```bash
-python fetch.py --subreddits SideProject --dry-run
+uv run reddit-fetch --subreddits SideProject --dry-run
 ```
 
 ## Options
@@ -84,6 +84,15 @@ The output markdown is designed to be pasted directly into a Claude chat for ana
 ## Running Tests
 
 ```bash
-pip install -r requirements-dev.txt
-pytest
+uv sync
+
+# Unit and integration tests
+make test
+
+# Live e2e tests (hits real Reddit API)
+make test-e2e
+
+# Lint and format
+make lint
+make format
 ```
