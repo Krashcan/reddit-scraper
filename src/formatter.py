@@ -37,9 +37,7 @@ class Formatter:
                 post_comments = comments.get(post.id, [])
                 if post_comments:
                     for comment in post_comments:
-                        lines.append(
-                            f"- **{comment.upvotes}** {comment.body}"
-                        )
+                        lines.append(f"- **{comment.upvotes}** {comment.body}")
                     lines.append("")
 
         return "\n".join(lines)

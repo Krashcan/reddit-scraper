@@ -19,9 +19,7 @@ class RateLimitError(Exception):
 class RedditClient:
     def __init__(self) -> None:
         self.base_url = "https://www.reddit.com"
-        self.headers = {
-            "User-Agent": "RedditResearcher/1.0 (personal research tool)"
-        }
+        self.headers = {"User-Agent": "RedditResearcher/1.0 (personal research tool)"}
         self.request_delay = float(os.getenv("REQUEST_DELAY_SECONDS", "1.0"))
 
     async def fetch_top_posts(
@@ -59,18 +57,14 @@ class RedditClient:
         await asyncio.sleep(self.request_delay)
         return comments
 
-    async def _get_with_retry(
-        self, url: str, params: dict
-    ) -> httpx.Response:
+    async def _get_with_retry(self, url: str, params: dict) -> httpx.Response:
         max_retries = 3
         for attempt in range(max_retries):
             async with httpx.AsyncClient(headers=self.headers) as http:
                 response = await http.get(url, params=params)
 
             if response.status_code == 404:
-                raise SubredditNotFoundError(
-                    f"Subreddit not found: {url}"
-                )
+                raise SubredditNotFoundError(f"Subreddit not found: {url}")
 
             if response.status_code == 429:
                 wait = 2**attempt
@@ -79,6 +73,4 @@ class RedditClient:
 
             return response
 
-        raise RateLimitError(
-            f"Rate limited after {max_retries} retries: {url}"
-        )
+        raise RateLimitError(f"Rate limited after {max_retries} retries: {url}")

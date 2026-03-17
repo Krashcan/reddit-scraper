@@ -120,7 +120,9 @@ class TestFetchTopPosts:
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
             with patch("src.client.asyncio.sleep", new_callable=AsyncMock):
-                posts = await client.fetch_top_posts("SideProject", limit=10, time_filter="month")
+                posts = await client.fetch_top_posts(
+                    "SideProject", limit=10, time_filter="month"
+                )
 
         assert isinstance(posts, list)
         assert len(posts) == 2
@@ -144,7 +146,9 @@ class TestFetchTopPosts:
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
             with patch("src.client.asyncio.sleep", new_callable=AsyncMock):
-                await client.fetch_top_posts("SideProject", limit=10, time_filter="month")
+                await client.fetch_top_posts(
+                    "SideProject", limit=10, time_filter="month"
+                )
 
         mock_http_client.get.assert_called_once_with(
             "https://www.reddit.com/r/SideProject/top.json",
@@ -166,8 +170,12 @@ class TestFetchTopPosts:
         client = RedditClient()
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
-            with patch("src.client.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
-                await client.fetch_top_posts("SideProject", limit=10, time_filter="month")
+            with patch(
+                "src.client.asyncio.sleep", new_callable=AsyncMock
+            ) as mock_sleep:
+                await client.fetch_top_posts(
+                    "SideProject", limit=10, time_filter="month"
+                )
 
         mock_sleep.assert_called_once_with(client.request_delay)
 
@@ -192,7 +200,9 @@ class TestFetchComments:
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
             with patch("src.client.asyncio.sleep", new_callable=AsyncMock):
-                comments = await client.fetch_comments("SideProject", "abc123", limit=10)
+                comments = await client.fetch_comments(
+                    "SideProject", "abc123", limit=10
+                )
 
         assert isinstance(comments, list)
         assert len(comments) == 2
@@ -238,7 +248,9 @@ class TestFetchComments:
         client = RedditClient()
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
-            with patch("src.client.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+            with patch(
+                "src.client.asyncio.sleep", new_callable=AsyncMock
+            ) as mock_sleep:
                 await client.fetch_comments("SideProject", "abc123", limit=10)
 
         mock_sleep.assert_called_once_with(client.request_delay)
@@ -263,7 +275,9 @@ class TestFetchTopPostsErrors:
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
             with patch("src.client.asyncio.sleep", new_callable=AsyncMock):
                 with pytest.raises(SubredditNotFoundError):
-                    await client.fetch_top_posts("nonexistent", limit=10, time_filter="month")
+                    await client.fetch_top_posts(
+                        "nonexistent", limit=10, time_filter="month"
+                    )
 
     @pytest.mark.asyncio
     async def test_retries_with_backoff_on_429(self):
@@ -283,8 +297,12 @@ class TestFetchTopPostsErrors:
         client = RedditClient()
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
-            with patch("src.client.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
-                posts = await client.fetch_top_posts("SideProject", limit=10, time_filter="month")
+            with patch(
+                "src.client.asyncio.sleep", new_callable=AsyncMock
+            ) as mock_sleep:
+                posts = await client.fetch_top_posts(
+                    "SideProject", limit=10, time_filter="month"
+                )
 
         assert len(posts) == 2
         # Backoff waits: 1s, 2s, then the final request_delay sleep
@@ -304,11 +322,15 @@ class TestFetchTopPostsErrors:
         client = RedditClient()
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
-            with patch("src.client.asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+            with patch(
+                "src.client.asyncio.sleep", new_callable=AsyncMock
+            ) as mock_sleep:
                 from src.client import RateLimitError
 
                 with pytest.raises(RateLimitError):
-                    await client.fetch_top_posts("SideProject", limit=10, time_filter="month")
+                    await client.fetch_top_posts(
+                        "SideProject", limit=10, time_filter="month"
+                    )
 
         # 3 backoff sleeps: 1s, 2s, 4s
         sleep_calls = [call.args[0] for call in mock_sleep.call_args_list]
@@ -331,7 +353,9 @@ class TestFetchTopPostsErrors:
 
         with patch("src.client.httpx.AsyncClient", return_value=mock_http_client):
             with patch("src.client.asyncio.sleep", new_callable=AsyncMock):
-                posts = await client.fetch_top_posts("emptysubreddit", limit=10, time_filter="month")
+                posts = await client.fetch_top_posts(
+                    "emptysubreddit", limit=10, time_filter="month"
+                )
 
         assert posts == []
         captured = capsys.readouterr()

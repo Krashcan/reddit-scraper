@@ -38,9 +38,7 @@ SAMPLE_COMMENTS = {
         ),
     ],
     "def456": [
-        Comment(
-            id="com3", body="Love this!", upvotes=12, post_id="def456"
-        ),
+        Comment(id="com3", body="Love this!", upvotes=12, post_id="def456"),
     ],
 }
 
