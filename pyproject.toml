@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "e2e: end-to-end tests that hit the real Reddit API (deselected by default)",
+]
+addopts = "-m 'not e2e'"
