@@ -12,7 +12,6 @@ import pytest
 from src.client import RedditClient, SubredditNotFoundError
 from src.models import Comment, Post
 
-
 pytestmark = pytest.mark.e2e
 
 
