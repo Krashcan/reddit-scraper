@@ -136,7 +136,7 @@ async def main(
     print(filepath)
 
 
-if __name__ == "__main__":
+def cli() -> None:
     args = parse_args()
     asyncio.run(
         main(
@@ -150,3 +150,7 @@ if __name__ == "__main__":
             dry_run=args.dry_run,
         )
     )
+
+
+if __name__ == "__main__":
+    cli()

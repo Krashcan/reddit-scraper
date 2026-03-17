@@ -1,13 +1,16 @@
-.PHONY: test lint format check hooks
+.PHONY: test test-e2e lint format check hooks
 
 test:
-	.venv/bin/python -m pytest tests/ -v
+	uv run pytest tests/ -v
+
+test-e2e:
+	uv run pytest -m e2e -v --override-ini="addopts="
 
 lint:
-	.venv/bin/ruff check .
+	uv run ruff check .
 
 format:
-	.venv/bin/black .
+	uv run black .
 
 check: format lint test
 
